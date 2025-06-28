@@ -16,9 +16,13 @@ export function login(req, res) {
     const { username, password } = req.body;
     const user = usuarios.find(u => u.username === username);
     if (!user || !bcrypt.compareSync(password, user.password)) {
-        return res.status(401).json({ message: 'Credenciais inválidas' });
+        return res.status(401).json({ message: 'Login inválido!' });
     }
 
     const token = jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
-    res.json({ token });
+    
+    res.json({
+        message: `Login efetuado pelo usuário ${username}`,
+        jwt: token
+    });
 }
